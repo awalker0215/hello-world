@@ -101,7 +101,7 @@ public class LoginRepository {
 	}
 	
 	public void deleteUser2(String username){
-		System.out.println("test");
+		System.out.println("test2");
 		String sql = "DELETE FROM blacklist WHERE nid =?" ; 
 		this.jdbcTemplate.update(sql,username);	
 
