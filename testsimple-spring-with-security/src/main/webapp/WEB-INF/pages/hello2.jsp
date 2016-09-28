@@ -1,0 +1,103 @@
+<%@taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<html>
+<script>
+function change_action3() {
+	document.form1.setAttribute('action', "newinsert");
+}
+
+function change_action2() {
+if(confirm("Are you sure to delete it?"))
+	{
+		document.form1.setAttribute('action', "delete2");
+		document.form1.submit();
+	}	
+	else
+	{
+		return false;
+	}
+}
+function change_action4() {
+	document.form1.setAttribute('action', "delete");
+}
+</script>
+<body>
+	<h1>Title : ${title}</h1>
+	<h1>Message : ${message}</h1>
+	
+	
+	<sec:authorize access="hasRole('ROLE_ADMIN')">
+		<!-- For login user -->
+	<form id="form1" name="form1" method="post" action="/simple-spring-with-security/delete2">
+	    <table width="500" border="1" cellspacing="0" cellpadding="0" style="border:1 px; border-collapse:collapse">
+	        <tr>
+	        	<td width="50">Select</td>
+	        	<td width="100">nId</td>
+	        </tr>
+		    <c:forEach items="${alluserinfo2}" var="p">
+		       <tr>
+		        <td><input type="radio" name="check_radio" id="check_radio" value="${p.nid}" /></td>
+		        <td><c:out value="${p.nid}"/></td>
+		      </tr>
+		    </c:forEach>
+	    </table>
+	    <br>
+		<table width="500" border="0" cellspacing="0" cellpadding="0">
+		    <td width="250" align="center"><input type="submit" name="button3" id="button3" value="newinsert" OnClick="change_action3();"></td>		   
+		    <td width="250" align="center"><input type="submit" name="button2" id="button2" value="deleteNid"></td>
+		     <td width="250" align="center"><input type="submit" name="button4" id="button4" value="hello" OnClick="change_action4();"></td>
+		  </tr>
+		</table>
+		<input type="hidden" name="${_csrf.parameterName}"
+				value="${_csrf.token}" />
+    </form>
+    
+		<c:url value="/j_spring_security_logout" var="logoutUrl" />
+		<form action="${logoutUrl}" method="post" id="logoutForm">
+			<input type="hidden" name="${_csrf.parameterName}"
+				value="${_csrf.token}" />
+		</form>
+	    
+		<script>
+			function formSubmit() {
+				document.getElementById("logoutForm").submit();
+			}
+		</script>
+
+		<c:if test="${pageContext.request.userPrincipal.name != null}">
+			<h2>
+				User : ${pageContext.request.userPrincipal.name} | <a
+					href="javascript:formSubmit()"> Logout</a>
+			</h2>
+		</c:if>
+
+
+	</sec:authorize>
+
+	<sec:authorize access="hasRole('ROLE_USER') and !hasRole('ROLE_ADMIN')">
+		<!-- For login user -->
+		<h1>User : ${useremail}</h1>
+		<c:url value="/j_spring_security_logout" var="logoutUrl" />
+		<form action="${logoutUrl}" method="post" id="logoutForm">
+			<input type="hidden" name="${_csrf.parameterName}"
+				value="${_csrf.token}" />
+		</form>
+	    
+		<script>
+			function formSubmit() {
+				document.getElementById("logoutForm").submit();
+			}
+		</script>
+
+		<c:if test="${pageContext.request.userPrincipal.name != null}">
+			<h2>
+				User : ${pageContext.request.userPrincipal.name} | <a
+					href="javascript:formSubmit()"> Logout</a>
+			</h2>
+		</c:if>
+
+
+	</sec:authorize>
+</body>
+</html>
