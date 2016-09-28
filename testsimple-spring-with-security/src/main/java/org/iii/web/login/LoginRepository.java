@@ -31,7 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository("LoginRepository")
 @Transactional
 public class LoginRepository {
-
+	
 	private JdbcTemplate jdbcTemplate;
 
 	@Inject	
@@ -101,6 +101,7 @@ public class LoginRepository {
 	}
 	
 	public void deleteUser2(String username){
+		System.out.println("test");
 		String sql = "DELETE FROM blacklist WHERE nid =?" ; 
 		this.jdbcTemplate.update(sql,username);	
 
